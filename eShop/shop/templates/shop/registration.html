@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block header %}
+{% include 'inc/_topbar.html' %}
+{% include 'inc/_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-3" style="padding-top:3%">
+        <h2>Registration</h2>
+        <div class="registration-form">
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <p class="reg-input" style="margin-top:2%;">
+                    {{ field.label_tag }} {{ field }}
+
+
+                    {% if field.help_text %}
+                        <small style="color: grey;">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <p class="reg-input" style="color:red;">{{ error }}</p>
+                    {% endfor %}
+                </p>
+                {% endfor %}
+                <button class="btn" type="submit" style="margin-left:15%; margin-bottom:2%">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'inc/_footer.html' %}
+{% include 'inc/_footerBottom.html' %}
+{% endblock %}

@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block header %}
+{% include 'inc/_topbar.html' %}
+{% include 'inc/_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+{% block breadcrumb %}
+{% include 'inc/_BottombarAndBreadcrumb.html' %}
+{% endblock %}
+        
+        <!-- Checkout Start -->
+        <form method="post" action="{% url 'make_order' product.pk %}">
+            {% csrf_token %}
+        <div class="checkout">
+            <div class="container-fluid"> 
+                <div class="row">
+                     <div class="col-lg-8">
+                        <div class="checkout-inner">
+                            <div class="billing-address">
+                                <h2>Billing Address</h2>
+                                <div class="row">
+                  <!-- <div class="col-lg-8">
+                        <div class="checkout-inner">
+                            <div class="billing-address">
+                                <h2>Billing Address</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>First Name</label>
+                                        <input name="first_name" value="{{ request.user.first_name }}" class="form-control" type="text" placeholder="First Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Last Name"</label>
+                                        <input name="last_name" value="{{ request.user.last_name }}" class="form-control" type="text" placeholder="Last Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>E-mail</label>
+                                        <input name="email" value="{{ request.user.email }}" class="form-control" type="text" placeholder="E-mail">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Mobile No</label>
+                                        <input name="mobile" value="{{ request.user.mobile }}" class="form-control" type="text" placeholder="Mobile No">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Address</label>
+                                        <input name="address" value="{{ request.user.address }}" class="form-control" type="text" placeholder="Address">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Country</label>
+                                        <select class="custom-select">
+                                            <option selected>United States</option>
+                                            <option>Afghanistan</option>
+                                            <option>Albania</option>
+                                            <option>Algeria</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>City</label>
+                                        <input class="form-control" type="text" placeholder="City">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>State</label>
+                                        <input class="form-control" type="text" placeholder="State">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>ZIP Code</label>
+                                        <input class="form-control" type="text" placeholder="ZIP Code">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Product Quantity</label>
+                                        <input name="product_quantity" value="1" class="form-control" type="number" placeholder="Product Quantity">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Payment Method</label>
+                                        <select name="payment_method" class="custom-select">
+                                            <option selected>Paypal</option>
+                                            <option>Payoneer</option>
+                                            <option>Check Payment</option>
+                                            <option>Direct Bank Transfer</option>
+                                            <option>Cash on Delivery</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="shipping-address">
+                                <h2>Shipping Address</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>First Name</label>
+                                        <input class="form-control" type="text" placeholder="First Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Last Name"</label>
+                                        <input class="form-control" type="text" placeholder="Last Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>E-mail</label>
+                                        <input class="form-control" type="text" placeholder="E-mail">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Mobile No</label>
+                                        <input class="form-control" type="text" placeholder="Mobile No">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Address</label>
+                                        <input class="form-control" type="text" placeholder="Address">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Country</label>
+                                        <select class="custom-select">
+                                            <option selected>United States</option>
+                                            <option>Afghanistan</option>
+                                            <option>Albania</option>
+                                            <option>Algeria</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>City</label>
+                                        <input class="form-control" type="text" placeholder="City">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>State</label>
+                                        <input class="form-control" type="text" placeholder="State">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>ZIP Code</label>
+                                        <input class="form-control" type="text" placeholder="ZIP Code">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                        {{ form.non_fields.errors }}
+                        <div class="col-md-6">
+                            <label for="form.first_name.id_for_label">First Name</label>
+                            {{ form.first_name }}
+                            <div class="errors">
+                                {{ form.first_name.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.last_name.id_for_label">Last Name</label>
+                            {{ form.last_name }}
+                            <div class="errors">
+                                {{ form.last_name.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.email.id_for_label">Email</label>
+                            {{ form.email }}
+                            <div class="errors">
+                                {{ form.email.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.mobile.id_for_label">Mobile Number</label>
+                            {{ form.mobile }}
+                            <div class="errors">
+                                {{ form.mobile.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="form.address.id_for_label">Address</label>
+                            {{ form.address }}
+                            <div class="errors">
+                                {{ form.address.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.country.id_for_label">Country</label>
+                            {{ form.country }}
+                            <div class="errors">
+                                {{ form.country.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.city.id_for_label">City</label>
+                            {{ form.city }}
+                            <div class="errors">
+                                {{ form.city.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.state.id_for_label">State</label>
+                            {{ form.state }}
+                            <div class="errors">
+                                {{ form.state.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.zip_code.id_for_label">Zip Code</label>
+                            {{ form.zip_code }}
+                            <div class="errors">
+                                {{ form.zip_code.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.product_quantity.id_for_label">Product Quantity</label>
+                            {{ form.product_quantity }}
+                            <div class="errors">
+                                {{ form.product_quantity.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="form.payment_method.id_for_label">Payment Method</label>
+                            {{ form.payment_method }}
+                            <div class="errors">
+                                {{ form.payment_method.errors }}
+                            </div>
+                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="checkout-inner">
+                            <div class="checkout-summary">
+                                <h1>Cart Total</h1>
+                                <p>Product Name<span>{{ product.name }}</span></p> <hr>
+                                <p class="price">Price<span>${{ product.price }}</span></p>
+                                <p class="sub-total">Sub Total<span>$99</span></p>
+                                <p class="ship-cost">Shipping Cost<span>$1</span></p>
+                                <h2 class="grand-total">Grand Total<span>$100</span></h2>
+                            </div>
+                            <div class="checkout-payment">
+                                <div class="checkout-btn">
+                                    <button type="submit">Place Order</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+        <!-- Checkout End -->
+{% endblock %}
+
+{% block footer %}
+{% include 'inc/_footer.html' %}
+{% include 'inc/_footerBottom.html' %}
+{% endblock %}
+
+

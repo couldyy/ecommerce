@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block header %}
+{% include 'inc/_topbar.html' %}
+{% include 'inc/_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+{% block breadcrumb %}
+{% include 'inc/_BottombarAndBreadcrumb.html' %}
+{% endblock%}
+
+        <!-- Cart Start -->
+        <div class="cart-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="cart-page-inner">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="align-middle">
+                                    {% if cart_products %}
+                                    {% for cart_product in cart_products %}
+                                        <tr>
+                                            <td>
+                                                <div class="img">
+                                                    <a href="{{ cart_product.get_absolute_url }}"><img src="{{ cart_product.image.url }}" alt="Image"></a>
+                                                    <p>{{ cart_product.name }}</p>
+                                                </div>
+                                            </td>
+                                            <td class="price">${{ cart_product.price }}</td>
+                                            <td>
+                                                <div class="qty">
+                                                    <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                                    <input type="text" value="1">
+                                                    <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </td>
+                                            <td class="totalPrice">$</td>
+                                            <td><a href="{% url 'remove_from_cart' pk=cart_product.pk%}"><i class="fa fa-trash"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% if not cart_products %}
+                        <h3>No products yet... <a href="{% url 'product_list' %}">Add one!</a></h3>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="cart-page-inner">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="cart-summary">
+                                        <div class="cart-content">
+                                            <h1>Cart Summary</h1>
+                                            <p>Sub Total<span>$99</span></p>
+                                            <p>Shipping Cost<span>$1</span></p>
+                                            <h2 class="grandTotal">Grand Total<span>$</span></h2>
+                                        </div>
+                                        <div class="cart-btn">
+                                            <button>Update Cart</button>
+                                            <button>Checkout</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cart End -->
+{% endblock %}
+
+{% block footer %}
+{% include 'inc/_footer.html' %}
+{% include 'inc/_footerBottom.html' %}
+{% endblock %}
+
+

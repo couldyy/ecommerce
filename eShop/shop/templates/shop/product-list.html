@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block header %}
+{% include 'inc/_topbar.html' %}
+{% include 'inc/_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+        
+{% block breadcrumb %}
+{% include 'inc/_BottombarAndBreadcrumb.html' %}
+{% endblock %}
+        
+        <!-- Product List Start -->
+        <div class="product-view">
+            <div class="container-fluid">
+                <h2>{{ category.title }}</h2>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="product-view-top">
+                                    <form action="{% url 'price_filtered' %}" method="get">
+                                    <div class="row">
+
+                                        <div class="col-md-4">
+                                            <div class="product-search">
+
+                                                <input name="se" type="text" placeholder="Search">
+                                                <!--<button><i class="fa fa-search"></i></button>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="product-short">
+                                                <div class="dropdown">
+
+                                                        <select name="sorting" class="filters-dropdown">
+                                                        <option class="dropdown-item" value="-created_at"{% if sorting == '-created_at' %} selected {% endif %}>Newest</option>
+                                                        <option class="dropdown-item" value="price"{% if sorting == 'price' %} selected {% endif %}>Price low-high</option>
+                                                        <option class="dropdown-item" value="-price"{% if sorting == '-price' %} selected {% endif %}>Price high-low</option>
+                                                        </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="product-priceRange">
+                                                Price
+                                                <input name="min_price" value="{{ min_price }}" placeholder="from..." type="text">
+                                                <input name="max_price" value="{{ max_price }}" placeholder="to..." type="text">
+                                                <button type="submit"><i class="fa fa-search"></i></button>
+
+
+
+                                            </div>
+                                            </div>
+                                        </div>
+
+
+                                        </form>
+                                </div>
+                            </div>
+                            {% for p in product %}
+                            <div class="col-md-4">
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="{{ p.get_absolute_url }}">{{ p.name }}</a>
+                                        <div class="ratting">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <a href="product-detail.html">
+                                            <img src="{{ p.image.url }}" height="400px" alt="Product Image">
+                                        </a>
+                                        <div class="product-action">
+                                            {% if request.user.is_authenticated %}
+                                            <a href="{% url 'add_to_cart' p.pk %}"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="{% url 'add_to_wishlist' p.pk %}"><i class="fa fa-heart"></i></a>
+                                            <a href="{% url 'make_order' p.pk %}"><i class="fa fa-shopping-bag"></i></a>
+                                            {% else %}
+                                            <a href="{% url 'login' %}"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="{% url 'login' %}"><i class="fa fa-heart"></i></a>
+                                            <a href="{% url 'login' %}"><i class="fa fa-shopping-bag"></i></a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>{{ p.price }}</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                        
+                        <!-- Pagination Start -->
+                        <div class="col-md-12">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?{{ s }}page={{ page_obj.previous_page_number }}">Previous</a></li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    {% endif %}
+
+                                    {% for page in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == page %}
+                                    <li class="page-item active"><a class="page-link" href="?{{ s }}page={{ page }}">{{ page }}</a></li>
+                                    {% elif page > page_obj.number|add:-2 and page < page_obj.number|add:2 %}
+                                    <li class="page-item"><a class="page-link" href="?{{ s }}page={{ page }}">{{ page }}</a></li>
+                                    {% endif %}
+
+                                    {% endfor %}
+                                    {% if page_obj.number != page_obj.paginator.num_pages %}
+                                    ...
+                                    <li class="page-item"><a class="page-link" href="?{{ s }}page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+                                    {% endif %}
+
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?{{ s }}page={{ page_obj.next_page_number }}">Next</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                        <!-- Pagination Start -->
+                    </div>           
+                    
+                    <!-- Side Bar Start -->
+                    <div class="col-lg-4 sidebar">
+                        <div class="sidebar-widget category">
+                            <h2 class="title">Category</h2>
+                            <nav class="navbar bg-light">
+                                <ul class="navbar-nav">
+                                    {% for cat in categories %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ cat.get_absolute_url }}"><i class="fa fa-female"></i>{{ cat.title }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </nav>
+                        </div>
+                        
+                        <div class="sidebar-widget widget-slider">
+                            <div class="sidebar-slider normal-slider">
+                                {% for p in productt %}
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="{{ p.get_absolute_url }}">{{ p.name }}</a>
+                                        <div class="ratting">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <a href="product-detail.html">
+                                            <img src="{{ p.image.url }}" height="500px" alt="Product Image">
+                                        </a>
+                                        <div class="product-action">
+                                            {% if request.user.is_authenticated %}
+                                            <a href="{% url 'add_to_cart' p.pk %}"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="{% url 'add_to_wishlist' p.pk %}"><i class="fa fa-heart"></i></a>
+                                            <a href="{% url 'make_order' p.pk %}"><i class="fa fa-shopping-bag"></i></a>
+                                            {% else %}
+                                            <a href="{% url 'login' %}"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="{% url 'login' %}"><i class="fa fa-heart"></i></a>
+                                            <a href="{% url 'login' %}"><i class="fa fa-shopping-bag"></i></a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>{{ p.price }}</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-widget brands">
+                            <h2 class="title">Our Brands</h2>
+                            <ul>
+                                {% for br in brands %}
+                                <li><a href="{{ br.get_absolute_url }}">{{ br.title }} </a><span></span></li>
+                                {% endfor %}
+                                <!--
+                                <li><a href="#">Nulla </a><span>(45)</span></li>
+                                <li><a href="#">Curabitur </a><span>(34)</span></li>
+                                <li><a href="#">Nunc </a><span>(67)</span></li>
+                                <li><a href="#">Ullamcorper</a><span>(74)</span></li>
+                                <li><a href="#">Fusce </a><span>(89)</span></li>
+                                <li><a href="#">Sagittis</a><span>(28)</span></li> -->
+                            </ul>
+                        </div>
+                        
+                    </div>
+                    <!-- Side Bar End -->
+                </div>
+            </div>
+        </div>
+        <!-- Product List End -->  
+        
+        <!-- Brand Start -->
+        <div class="brand">
+            <div class="container-fluid">
+                <div class="brand-slider">
+                    <div class="brand-item"><img src="{% static 'img/brand-1.png' %}" alt=""></div>
+                    <div class="brand-item"><img src="{% static 'img/brand-2.png' %}" alt=""></div>
+                    <div class="brand-item"><img src="{% static 'img/brand-3.png' %}" alt=""></div>
+                    <div class="brand-item"><img src="{% static 'img/brand-4.png' %}" alt=""></div>
+                    <div class="brand-item"><img src="{% static 'img/brand-5.png' %}" alt=""></div>
+                    <div class="brand-item"><img src="{% static 'img/brand-6.png' %}" alt=""></div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+        <!-- Brand End -->
+
+{% block footer %}
+        <!-- Footer Start -->
+{% include 'inc/_footer.html' %}
+        <!-- Footer End -->
+        
+        <!-- Footer Bottom Start -->
+{% include 'inc/_footerBottom.html' %}
+        <!-- Footer Bottom End -->       
+
+{% endblock %}

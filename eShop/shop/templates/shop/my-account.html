@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% endblock %}
+
+{% block header %}
+{% include 'inc/_topbar.html' %}
+{% include 'inc/_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+
+{% block breadcrumb %}
+{% include 'inc/_BottombarAndBreadcrumb.html' %}
+{% endblock %}
+
+        <!-- My Account Start -->
+        <div class="my-account">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="dashboard-nav" data-toggle="pill" href="#dashboard-tab" role="tab"><i class="fa fa-tachometer-alt"></i>Dashboard</a>
+                            <a class="nav-link" id="orders-nav" data-toggle="pill" href="#orders-tab" role="tab"><i class="fa fa-shopping-bag"></i>Orders</a>
+                            <a class="nav-link" id="payment-nav" data-toggle="pill" href="#payment-tab" role="tab"><i class="fa fa-credit-card"></i>Payment Method</a>
+                            <a class="nav-link" id="address-nav" data-toggle="pill" href="#address-tab" role="tab"><i class="fa fa-map-marker-alt"></i>address</a>
+                            <a class="nav-link" id="account-nav" data-toggle="pill" href="#account-tab" role="tab"><i class="fa fa-user"></i>Account Details</a>
+                            <a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-sign-out-alt"></i>Logout</a>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="dashboard-tab" role="tabpanel" aria-labelledby="dashboard-nav">
+                                <h4>Dashboard</h4>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante suscipit non. Praesent in faucibus tellus, sed gravida lacus. Vivamus eu diam eros. Aliquam et sapien eget arcu rhoncus scelerisque.
+                                </p> 
+                            </div>
+                            <div class="tab-pane fade" id="orders-tab" role="tabpanel" aria-labelledby="orders-nav">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Product</th>
+                                                <th>Date</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for order in orders %}
+                                            <tr>
+                                                <td>{{ order.id }}</td>
+                                                <td>{{ order.product.name }}</td>
+                                                <td>{{ order.created_at}}</td>
+                                                <td>${{ order.grand_total }}</td>
+                                                <td>{{ order.status }}</td>
+                                                <td><a href="{% url 'product_detail' slug=order.product.slug %}" class="btn">View</a></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="payment-tab" role="tabpanel" aria-labelledby="payment-nav">
+                                <h4>Payment Method</h4>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante suscipit non. Praesent in faucibus tellus, sed gravida lacus. Vivamus eu diam eros. Aliquam et sapien eget arcu rhoncus scelerisque.
+                                </p> 
+                            </div>
+                            <div class="tab-pane fade" id="address-tab" role="tabpanel" aria-labelledby="address-nav">
+                                <h4>Address</h4>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Payment Address</h5>
+                                        <p>123 Payment Street, Los Angeles, CA</p>
+                                        <p>Mobile: 012-345-6789</p>
+                                        <button class="btn">Edit Address</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Shipping Address</h5>
+                                        <p>123 Shipping Street, Los Angeles, CA</p>
+                                        <p>Mobile: 012-345-6789</p>
+                                        <button class="btn">Edit Address</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="account-tab" role="tabpanel" aria-labelledby="account-nav">
+                                <h4>Account Details</h4>
+                                <form method="post" action="{% url 'change_general_data' pk=request.user.id %}">
+                                    {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="first_name" type="text" placeholder="First Name" value="{{ account.first_name }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="last_name" type="text" placeholder="Last Name" value="{{ account.last_name }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="mobile" type="tel" placeholder="Mobile" value="{{ account.mobile }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="email" type="text" placeholder="Email" value="{{ account.email }}">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input class="form-control" name="address" type="text" placeholder="Address" value="{{ account.address }}">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button class="btn" type="submit">Update Account</button>
+                                        <br><br>
+                                    </div>
+                                </div>
+                                </form>
+                                <h4>Password change</h4>
+                                <form action="{% url 'change_password' pk=request.user.id %}" method="post">
+                                    {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input class="form-control" name="password" type="password" placeholder="Current Password">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="password1" type="password" placeholder="New Password">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="password2" type="password" placeholder="Confirm Password">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn">Save Changes</button>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- My Account End -->
+{% endblock %}
+
+{% block footer %}
+{% include 'inc/_footer.html' %}
+{% include 'inc/_footerBottom.html' %}
+{% endblock %}
+        <!-- Footer Start -->
+        <div class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h2>Get in Touch</h2>
+                            <div class="contact-info">
+                                <p><i class="fa fa-map-marker"></i>123 E Store, Los Angeles, USA</p>
+                                <p><i class="fa fa-envelope"></i>email@example.com</p>
+                                <p><i class="fa fa-phone"></i>+123-456-7890</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h2>Follow Us</h2>
+                            <div class="contact-info">
+                                <div class="social">
+                                    <a href=""><i class="fab fa-twitter"></i></a>
+                                    <a href=""><i class="fab fa-facebook-f"></i></a>
+                                    <a href=""><i class="fab fa-linkedin-in"></i></a>
+                                    <a href=""><i class="fab fa-instagram"></i></a>
+                                    <a href=""><i class="fab fa-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h2>Company Info</h2>
+                            <ul>
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a href="#">Terms & Condition</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget">
+                            <h2>Purchase Info</h2>
+                            <ul>
+                                <li><a href="#">Pyament Policy</a></li>
+                                <li><a href="#">Shipping Policy</a></li>
+                                <li><a href="#">Return Policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row payment align-items-center">
+                    <div class="col-md-6">
+                        <div class="payment-method">
+                            <h2>We Accept:</h2>
+                            <img src="img/payment-method.png" alt="Payment Method" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="payment-security">
+                            <h2>Secured By:</h2>
+                            <img src="img/godaddy.svg" alt="Payment Security" />
+                            <img src="img/norton.svg" alt="Payment Security" />
+                            <img src="img/ssl.svg" alt="Payment Security" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+        
+        <!-- Footer Bottom Start -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 copyright">
+                        <p>Copyright &copy; <a href="https://htmlcodex.com">HTML Codex</a>. All Rights Reserved</p>
+                    </div>
+
+                    <div class="col-md-6 template-by">
+                        <p>Template By <a href="https://htmlcodex.com">HTML Codex</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Bottom End -->       
+        
